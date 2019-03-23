@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.dao.IUsersImageDao">
+	<resultMap type="com.bdqn.entity.UsersImage" id="usersImageResultMap">
+		<result property="userImageId" column="user_Image_id" />
+		<result property="userId" column="user_id" />
+		<result property="userImageName" column="User_Image_Name" />
+		<result property="userImagePath" column="user_Image_path" />
+		<result property="userImageType" column="User_Image_Type" />
+		<result property="userImageStatus" column="User_Image_Status" />
+	</resultMap>
+	<!-- 添加图片 -->
+	<insert id="addUsersImage" parameterType="usersImage">
+		<selectKey keyProperty="userImageId" resultType="int" order="BEFORE">
+			select users_Image_seq.Nextval from dual
+		</selectKey>
+		insert into 
+		users_Image(user_Image_id,user_id,User_Image_Name,user_Image_path,User_Image_Type,User_Image_Status)
+		values(#{userImageId},#{userId},#{userImageName},#{userImagePath},#{userImageType},#{userImageStatus})
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delUsersImage" parameterType="int">
+		delete from users_Image
+		where user_Image_id = #{userImageId}
+	</delete>
+	<!-- 修改 -->
+	<update id="updateUsersImage" parameterType="usersImage">
+		update users_Image
+		<set>
+			<if test="userImageName!=null and userImageName !=''">
+				user_Image_name =
+				#{userImageName},
+			</if>
+			<if test="userImagePath!=null and userImagePath !=''">
+				user_Image_path
+				= #{userImagePath},
+			</if>
+			<if test="userImageType!=null and userImageType !=''">
+				user_Image_type =
+				#{userImageType},
+			</if>
+			<if test="userImageStatus!=null and userImageStatus !=''">
+				user_Image_status = #{userImageStatus}
+			</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	<!--得到图片-->
+	<select id="getUsersImage" parameterType="usersImage" resultMap="usersImageResultMap">
+		select * from users_Image where 1=1
+		<if test="userId!=null">
+			and user_id = #{userId}
+		</if>
+		<if test="userImageType!=null">
+			and user_Image_type = #{userImageType}
+		</if>
+		<if test="userImageStatus>0">
+			and user_Image_status = #{userImageStatus}
+		</if>
+	</select>
+
+</mapper>

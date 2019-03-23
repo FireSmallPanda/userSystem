@@ -1,0 +1,202 @@
+
+
+drop table dictionarys
+create table dictionarys(
+       dict_id number(11) primary key,
+       dict_system varchar2(50) not null,
+       dict_name varchar2(50) not null,      
+       dict_group varchar2(20) not null,
+       dict_key varchar2(20) not null,
+       dict_content_CN varchar2(200) not null,
+       dict_content_EN varchar2(200) not null,
+       dict_status number(2) not null
+);
+-- 字典表
+create sequence dictionarys_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+
+--添加数据
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','100','可用状态','1','可用','Available',1);
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','100','可用状态','2','禁用','Disable',1);
+
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','101','时间状态','1','已完成','HasEnded',1);
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','101','时间状态','2','进行中','OnTheMarch',1);
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','101','时间状态','3','将来','Future',1);
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','101','时间状态','0','全部','All',1);
+
+insert into dictionarys(dict_id,dict_system,dict_group,dict_name,dict_key,dict_content_cn,dict_content_en,dict_status)
+values(dictionarys_seq.nextval,'100001','103','图片类型','1','头像','headImage',1);
+
+
+select * from dictionarys
+
+
+
+-- 用户信息表
+drop table  useraccount
+create table useraccount
+(
+user_id number(11) primary key,
+user_name varchar2(20) not null ,
+user_account varchar2(20) not null unique,
+user_password varchar2(20) not null,
+user_email varchar2(80) not null,
+user_status number(2) not null
+);
+
+
+
+create sequence useraccount_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+
+--项目表
+create table projects(
+  projects_id number(11) primary key,
+  projects_name varchar2(50) not null ,
+  projects_start date not null,
+  projects_end date not null,
+  projects_status number(2) not null
+);
+create sequence projects_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+
+
+--用户和项目关联表
+create table user_project(
+  relation_id number(11) primary key,
+  user_id number(11) not null,
+  projects_id number(11) not null,
+  create_date date not null
+);
+create sequence user_project_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+alter table user_project add constraint fk_userproject_plane
+ foreign key(user_id) references useraccount(user_id);
+alter table user_project add constraint fk_userproject_projects
+ foreign key(projects_id) references projects(projects_id);
+ 
+--建立用户意见表
+drop table consumerView
+create table consumerView(
+  consumer_view_id number(11) primary key,
+  consumer_view_contact_way varchar2(50) not null,
+  consumer_view_context varchar2(500) not null,
+   consumer_view_Date date not null,
+  consumer_view_status number(2) not null
+);
+
+ 
+ 
+create sequence consumerView_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+
+-- 建立图片表
+drop table users_Image
+create table users_Image(
+  user_Image_id number(11) primary key,
+  user_id  number(11) not null,
+  user_Image_name varchar2(50) not null,
+  user_Image_path varchar2(500) not null,
+   user_Image_type varchar2(50) not null,
+  user_Image_status number(2) not null
+);
+--建立外键
+alter table users_Image add constraint fk_usersImage_user
+ foreign key(user_id) references useraccount(user_id);
+ -- 建立自增列
+create sequence users_Image_seq
+start with 1     --从1开始
+increment by 1  --每次增1
+minvalue 1      --最小值
+maxvalue 999999999999999   --最大值
+NOCYCLE -- 一直累加，不循环
+NOCACHE -- 不建缓冲区 
+ 
+ 
+-- 添加数据user
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'张三','aaa','123456','lanmeng3263@163.com',1)
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'李四','bbb','123456','792434170@qq.com',1)
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'小戴','ccc','123456','asdsaddasdas@qq.com',1)
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'晓得','ddd','123456','asdasdassa@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'艾琳','eee','123456','xczxcx@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'张岱','fff','123456','wqeqw@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'似的','www','123456','asdasdas@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'曹操','asc','123456','cxcxx@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'列表','cssx','123456','sdsdsdd@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'老师','aassx','123456','axcxca@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'格林','wes','123456','aaxa@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'对你','aassxx','123456','aaca@qq.com',1);
+insert into useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+values(useraccount_seq.nextval,'嘻嘻嘻','ffggcc','123456','aaa@qq.com',1);
+--添加数据project
+insert into projects(projects_id,projects_name,projects_start,projects_end,projects_status)
+values(projects_seq.nextval,'小项目',to_date( '2007-12-20' , 'YYYY-MM-DD' ),to_date( '2017-12-20' , 'YYYY-MM-DD' ),1);
+insert into projects(projects_id,projects_name,projects_start,projects_end,projects_status)
+values(projects_seq.nextval,'小项目2',to_date( '2007-12-21' , 'YYYY-MM-DD' ),to_date( '2016-12-20' , 'YYYY-MM-DD' ),1);
+insert into projects(projects_id,projects_name,projects_start,projects_end,projects_status)
+values(projects_seq.nextval,'小项目3',to_date( '2007-12-22' , 'YYYY-MM-DD' ),to_date( '2017-12-20' , 'YYYY-MM-DD' ),1);
+insert into projects(projects_id,projects_name,projects_start,projects_end,projects_status)
+values(projects_seq.nextval,'小项目4',to_date( '2007-12-23' , 'YYYY-MM-DD' ),to_date( '2018-12-20' , 'YYYY-MM-DD' ),1);
+--添加数据user_project
+insert into user_project(relation_id,user_id,projects_id,create_date)
+values(user_project_seq.nextval,3,2,to_date( '2008-12-20' , 'YYYY-MM-DD' ));
+
+--添加consumerView数据
+insert into consumerView(consumer_view_id,Consumer_View_Contact_Way,Consumer_View_Context,Consumer_View_Date,Consumer_View_Status)
+values(consumerView_seq.Nextval,'QQ18511233','突然想提个意见',to_date( '2018-12-20' , 'YYYY-MM-DD' ),1);
+--添加 users_Image 数据
+insert into users_Image(user_Image_id,user_id,User_Image_Name,user_Image_path,User_Image_Type,User_Image_Status)
+values(users_Image_seq.Nextval,1,'头像图片','D:/xx.jpg','1',1);
+
+select * from dictionarys
+
+select * from useraccount
+select * from projects
+select * from user_project
+select * from consumerView
+select * from users_Image
+
+select * from users_Image where 1=1 and user_id = 1 and user_Image_type = '1'

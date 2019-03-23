@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.dao.IDictionarysDao">
+	<resultMap type="com.bdqn.entity.Dictionarys" id="dictionarysMap">
+		<result property="dictId" column="dict_id" />
+		<result property="dictSystem" column="dict_system" />
+		<result property="dictName" column="dict_name" />
+		<result property="dictGroup" column="dict_group" />
+		<result property="dictKey" column="dict_key" />
+		<result property="dictContentCN" column="dict_content_cn" />
+		<result property="dictContentEN" column="dict_content_en" />
+		<result property="dictStatus" column="dict_status" />	
+	</resultMap>
+	<!-- 查询字典 -->
+	<select id="serachDictionarys" parameterType="dictionarys" resultMap="dictionarysMap">
+		select * from dictionarys where 1=1
+			<if test="dictId!=null">
+				and dict_id = #{dictId}
+			</if>
+			<if test="dictSystem!=null">
+				and dict_system = #{dictSystem}
+			</if>
+			<if test="dictGroup!=null">
+				and dict_group = #{dictGroup}
+			</if>
+			<if test="dictStatus!=null">
+				and dict_status = #{dictStatus}
+			</if>	
+	</select>
+</mapper>

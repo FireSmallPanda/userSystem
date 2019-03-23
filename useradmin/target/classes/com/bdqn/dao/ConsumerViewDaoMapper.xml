@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.dao.IConsumerViewDao">
+	<resultMap type="com.bdqn.entity.ConsumerView" id="consumerViewMap">
+		<result property="consumerViewId" column="consumer_View_Id" />
+		<result property="consumerViewContactWay" column="consumer_View_Contact_Way" />
+		<result property="consumerViewContext" column="consumer_View_Context" />
+		<result property="consumerViewDate" column="consumer_View_Date" />
+		<result property="consumerViewStatus" column="consumer_View_Status" />
+	</resultMap>
+	<insert id="addConsumerView" parameterType="consumerView">
+		<selectKey keyProperty="consumerViewId" resultType="int" order="BEFORE">
+			select consumerView_seq.nextval from dual
+		</selectKey>
+		insert into 
+		consumerView(consumer_view_id,Consumer_View_Contact_Way,Consumer_View_Context,Consumer_View_Date,Consumer_View_Status)
+		values(#{consumerViewId},#{consumerViewContactWay},#{consumerViewContext},#{consumerViewDate,jdbcType=TIMESTAMP},#{consumerViewStatus})
+	</insert>
+</mapper>

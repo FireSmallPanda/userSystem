@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.dao.IUserDao">
+	<resultMap type="com.bdqn.entity.User" id="userResultMap">
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="userAccount" column="user_account" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_Email" />
+		<result property="userStatus" column="user_status" />
+	</resultMap>
+
+	<!--用户登录 -->
+	<select id="getUserInfoByPassword" parameterType="user"
+		resultMap="userResultMap">
+		select * from useraccount where user_account =
+		#{userAccount} and user_password = #{userPassword} and user_status = 1
+	</select>
+	<!-- 条件查询 -->
+	<select id="getAllUser" resultMap="userResultMap">
+
+		SELECT * FROM
+		(
+		SELECT A.*, ROWNUM RN
+		FROM (
+		select * from useraccount
+		) A
+		WHERE ROWNUM <![CDATA[<]]>=
+		10
+		)
+		WHERE RN >= 1
+	</select>
+
+	<!-- 添加用户信息 -->
+	<insert id="addUser" parameterType="user">
+		<selectKey keyProperty="userId" resultType="int" order="BEFORE">
+			select useraccount_seq.nextval from dual
+		</selectKey>
+		insert into
+		useraccount(user_id,user_name,user_account,user_password,user_email,user_status)
+		values(#{userId},#{userName},#{userAccount},#{userPassword},#{userEmail},#{userStatus})
+	</insert>
+	<!-- 删除 -->
+	<delete id="deleteUser" parameterType="int">
+		delete from Useraccount
+		where user_id = #{userId}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="updateUser" parameterType="user">
+		update useraccount
+		<set>
+			<if test="userName!=null and userName !=''">
+				user_name =
+				#{userName},
+			</if>
+			<if test="userPassword!=null and userPassword !=''">
+				user_password
+				= #{userPassword},
+			</if>
+			<if test="userEmail!=null and userEmail !=''">
+				user_Email =
+				#{userEmail},
+			</if>
+			<if test="userStatus!=null and userStatus !=''">
+				user_status = #{userStatus}
+			</if>
+		</set>
+		<choose>
+			<when test="userId !=null and userId != ''">
+				where user_id = #{userId}
+			</when>
+			<when test="userAccount !=null and userAccount != ''"><!-- 密码修改时  -->
+				where user_Account = #{userAccount}
+			</when>
+			<otherwise>
+				where user_id = #{userId}
+			</otherwise>
+		</choose>
+		
+	</update>
+
+	<!-- 条件查询 -->
+	<select id="serachUser" parameterType="user" resultMap="userResultMap">
+		SELECT * FROM
+		(
+		SELECT A.*, ROWNUM RN
+		FROM (select * from useraccount
+		where 1=1
+		<if test="userId!=null">
+			and user_id = #{userId}
+		</if>
+		<if test="userEmail!=null">
+			and user_Email like '%${userEmail}%'
+		</if>
+		<if test="userName!=null">
+			and user_name like '%${userName}%'
+		</if>
+
+		<if test="userStatus>0">
+			and user_status = #{userStatus}
+		</if>
+
+		) A
+		WHERE ROWNUM <![CDATA[<]]>=
+		#{endRow}
+		)
+		WHERE RN >= #{startRow}
+
+	</select>
+
+	<!-- 条件查询记录数 -->
+	<select id="serachUserCount" parameterType="user" resultType="int">
+
+		select count(*) from useraccount where 1=1
+		<if test="userId!=null">
+			and user_id = #{userId}
+		</if>
+		<if test="userAccount!=null">
+			and user_Account = #{userAccount}
+		</if>
+		<if test="userName!=null">
+			and user_name like '%${userName}%'
+		</if>
+		<if test="userEmail!=null">
+			and user_Email like '%${userEmail}%'
+		</if>
+		<if test="userStatus>0">
+			and user_status = #{userStatus}
+		</if>
+	</select>
+
+	<!-- 得到邮件地址 -->
+	<select id="getUserEmail" parameterType="user" resultMap="userResultMap">
+		select user_Email from useraccount where 1=1
+		<if test="userAccount!=null">
+			and user_Account = #{userAccount}
+		</if>
+	</select>
+
+
+</mapper>

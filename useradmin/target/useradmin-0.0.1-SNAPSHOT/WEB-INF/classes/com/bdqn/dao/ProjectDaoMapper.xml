@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bdqn.dao.IProjectsDao">
+	<resultMap type="com.bdqn.entity.Projects" id="projectsResultMap">
+		<result property="projectsId" column="projects_id" />
+		<result property="projectsName" column="projects_name" />
+		<result property="projectsStart" column="projects_start" />
+		<result property="projectsEnd" column="projects_end" />
+		<result property="projectsStatus" column="projects_status" />
+	</resultMap>
+	<!-- 添加项目信息 -->
+	<insert id="addProject" parameterType="projects">
+		<selectKey keyProperty="projectsId" resultType="int" order="BEFORE">
+			select projects_seq.nextval from dual
+		</selectKey>
+		insert into
+		projects(projects_id,projects_name,projects_start,projects_end,projects_status)
+		values(#{projectsId},#{projectsName},#{projectsStart,jdbcType=TIMESTAMP},#{projectsEnd,jdbcType=TIMESTAMP},#{projectsStatus})
+	</insert>
+	<!-- 删除 -->
+	<delete id="deleteProject" parameterType="int">
+		delete from projects
+		where projects_id = #{projectsId}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="updateProject" parameterType="projects">
+		update projects
+		<set>
+			<if test="projectsName!=null and projectsName !=''">
+				projects_name
+				= #{projectsName},
+			</if>
+			<if test="projectsStart!=null and projectsStart !=''">
+				projects_start = #{projectsStart,jdbcType=TIMESTAMP},
+			</if>
+			<if test="projectsEnd!=null and projectsEnd !=''">
+				projects_end =
+				#{projectsEnd,jdbcType=TIMESTAMP},
+			</if>
+			<if test="projectsStatus!=null and projectsStatus !=''">
+				projects_status = #{projectsStatus},
+			</if>
+		</set>
+		where projects_id = #{projectsId}
+	</update>
+	<!-- 条件查询记录数 -->
+	<select id="serachProjectCount" parameterType="projects"
+		resultType="int">
+
+		select count(*) from projects where 1=1
+		<if test="projectsId>0">
+			and projects_id = #{projectsId}
+		</if>
+		<if test="projectsName!=null and projectsName !=''">
+			and projects_name like '%${projectsName}%'
+		</if>
+		<if test="projectsStatus!=null and projectsStatus !=0">
+			and projects_status = #{projectsStatus}
+		</if>
+		<choose>
+			<when test="projectsStart == null and projectsEnd == null ">
+				
+			</when>
+			<when test="projectsStart != null and projectsEnd == null " >
+				and projects_start > sysdate
+			</when>
+			<when test="projectsStart == null and projectsEnd != null " >
+				and projects_End &lt; sysdate-1
+			</when>
+			<when test="projectsStart != null and projectsEnd != null " >
+				and projects_Start &lt; sysdate  and projects_End > sysdate-1
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<!-- 分页查询项目 -->
+	<select id="serachProject" parameterType="projects" resultMap="projectsResultMap">
+		SELECT * FROM
+		(
+		SELECT A.*, ROWNUM RN
+		FROM (select * from projects
+		where 1=1
+		<if test="projectsId>0">
+			and projects_id = #{projectsId}
+		</if>
+		<if test="projectsName!=null and projectsName !=''">
+			and projects_name like '%${projectsName}%'
+		</if>
+		<if test="projectsStatus!=null and projectsStatus !=0">
+			and projects_status = #{projectsStatus}
+		</if>
+		<choose>
+			<when test="projectsStart == null and projectsEnd == null ">
+				
+			</when>
+			<when test="projectsStart != null and projectsEnd == null " >
+				and projects_start > sysdate
+			</when>
+			<when test="projectsStart == null and projectsEnd != null " >
+				and projects_End &lt; sysdate-1
+			</when>
+			<when test="projectsStart != null and projectsEnd != null " >
+				and projects_Start &lt; sysdate  and projects_End > sysdate-1
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+
+
+		) A
+		WHERE ROWNUM <![CDATA[<]]>=
+		#{endRow}
+		)
+		WHERE RN >= #{startRow}
+	</select>
+
+</mapper>

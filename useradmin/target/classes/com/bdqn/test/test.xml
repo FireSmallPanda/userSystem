@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+	<book>
+		<name>哈里波特</name>
+		<price>10</price>
+		<memo>这是一本很好看的书。</memo>
+	</book>
+</books>  

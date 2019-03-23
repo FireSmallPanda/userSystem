@@ -1,0 +1,69 @@
+.am-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%; }
+  .am-modal .am-modal-mask {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); }
+  .am-modal .am-modal-bd {
+    box-sizing: content-box;
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    left: 50%;
+    z-index: 11;
+    border: 4px solid #eee;
+    box-shadow: 6px 6px 7px #444;
+    animation: modalShow 0.3s ease-out; }
+    .am-modal .am-modal-bd .am-modal-close {
+      outline: none;
+      height: 28px;
+      width: 28px;
+      font-size: 15px;
+      z-index: 12;
+      background-color: #fff;
+      position: absolute;
+      border-radius: 50%;
+      font-weight: bold;
+      top: -13px;
+      right: -13px;
+      border: 1px solid #fff; }
+      .am-modal .am-modal-bd .am-modal-close:hover {
+        cursor: pointer; }
+    .am-modal .am-modal-bd #am-modal-cvs {
+      margin: 0;
+      padding: 0; }
+    .am-modal .am-modal-bd .am-modal-text {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      padding: 8px 6px;
+      background-color: #fff;
+      border-top: 4px solid #eee;
+      font-size: 14px;
+      font-weight: bold; }
+
+@keyframes modalShow {
+  from {
+    transform: scale(0, 0);
+    opacity: 0; }
+  to {
+    transform: scale(1, 1);
+    opacity: 1; } }
+@keyframes modalFade {
+  from {
+    opacity: 1;
+    transform: translate(0); }
+  to {
+    transform: translate(-300px);
+    opacity: 0; } }
+
+/*# sourceMappingURL=AmazeUIModal.css.map */

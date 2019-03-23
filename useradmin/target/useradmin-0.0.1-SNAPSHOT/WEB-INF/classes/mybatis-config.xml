@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias alias="user" type="com.bdqn.entity.User" />
+		<typeAlias alias="dictionarys" type="com.bdqn.entity.Dictionarys" />
+		<typeAlias alias="projects" type="com.bdqn.entity.Projects" />
+		<typeAlias alias="consumerView" type="com.bdqn.entity.ConsumerView" />
+		<typeAlias alias="usersImage" type="com.bdqn.entity.UsersImage" />
+	</typeAliases>
+	<!-- 配置多个数据库环境 -->
+	<environments default="development">
+		<!-- 配置单个数据库环境 -->
+		<environment id="development">
+			<!-- 配置事务管理器。type取值为JDBC和MANAGED -->
+			<transactionManager type="JDBC" />
+			<!-- 配置数据源。type属性取值为POOLED、UNPOOLED和JNDI -->
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@localhost:1521:ORCL" />
+				<property name="username" value="System" />
+				<property name="password" value="lanmeng3263" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/bdqn/dao/DictionarysDaoMapper.xml" />
+		<mapper resource="com/bdqn/dao/UserDaoMapper.xml" />
+		<mapper resource="com/bdqn/dao/ProjectDaoMapper.xml" />
+		<mapper resource="com/bdqn/dao/ConsumerViewDaoMapper.xml" />
+		<mapper resource="com/bdqn/dao/UsersImageDaoMapper.xml" />
+	</mappers>
+</configuration>
